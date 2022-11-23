@@ -45,7 +45,7 @@ class Calendar:
         for e in calendar_list:
             for key,value in e.items():
                 event_date.append(value)
-        print(event_date)
+        # print(event_date)
 
         for d in event_date:
             dateTime = str(d[0:10]).split("-")
@@ -81,15 +81,23 @@ class Calendar:
 
 
     def get_hour(self):
-        # dateTime = self.get_dateTime_and_name()
-        dateTime = "2022-11-21T10:30:00+01:00"
-        h = dateTime[11:19].split(":")
-        hour = dt.time(hour=int(h[0]), minute=int(h[1]), second=int(h[2])).strftime("%H:%M")
-        # print(hour)
-        return hour
+        hour_list = []
+        hours = []
+        calendar_list = self.get_dateTime_and_name()
+        for h in calendar_list:
+            for key, value in h.items():
+                hour_list.append(value)
+        # print(hour_list)
+
+        for h in hour_list:
+            time = str(h[11:19]).split(":")
+            hours.append(dt.time(hour=int(time[0]), minute=int(time[1]), second=int(time[2])).strftime("%H:%M"))
+        # print(hours)
+        return hours
 
 
-c = Calendar(calendar)
-for i in range(0,5):
-    i += 1
-    print(f"Hai un evento: {c.name[i]}, {c.weekday[i]} {c.date_number[i]} {c.month[i]} alle ore {c.hour}")
+# c = Calendar(calendar)
+# c.get_hour()
+# for i in range(0,5):
+#     i += 1
+#     print(f"Hai un evento: {c.name[i]}, {c.weekday[i]} {c.date_number[i]} {c.month[i]} alle ore {c.hour[i]}")
