@@ -2,4 +2,5 @@ calendar.py
 calendar_events.py
 google_calendar/
 microsoft_to_do_list/
+open_weather_map/
 token.json
