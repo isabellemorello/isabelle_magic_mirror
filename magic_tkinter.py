@@ -29,9 +29,7 @@ SCOPES = ["https://www.googleapis.com/auth/calendar.readonly", "https://www.goog
 now = dt.datetime.now()
 clock = now.strftime("%H:%M:%S")
 date = now.strftime("%A, %d %B")
-count = 0
-row_number = 0
-size = 14
+# size = 14
 calendar_m = Calendar(calendar)
 ricorda_di_list = ToDoList(ricorda_di_task).title_list
 routine_list = ToDoList(routine_task).title_list
@@ -143,12 +141,19 @@ def weather_icon_f():
 
 # ----------------------------------------------------------------------------------------------------------
 # -------------------------------------------------- GUI ---------------------------------------------------
-frame1 = Frame(window, background="black", height=200, width=200)
-frame1.grid(row=0, column=0, sticky="wesn", padx=20)
-frame2 = Frame(window, background="black", height=200, width=200)
-frame2.grid(row=0, column=1, sticky="wesn", padx=20)
-frame3 = Frame(window, background="black", height=200, width=200)
-frame3.grid(row=0, column=2, sticky="wesn", padx=20)
+frame1 = Frame(window, background="black")
+frame1.grid(row=0, column=0, sticky="wesn", padx=5)
+frame2 = Frame(window, background="black")
+frame2.grid(row=0, column=1, sticky="wesn", padx=5)
+frame3 = Frame(window, background="black")
+frame3.grid(row=0, column=2, sticky="wesn", padx=5)
+frame4 = Frame(frame1, background="black")
+frame4.grid(row=1, column=0, sticky="wesn")
+frame5 = Frame(frame1, background="black")
+frame5.grid(row=2, column=0, sticky="wesn")
+frame6 = Frame(frame1, background="black")
+frame6.grid(row=3, column=0, sticky="wesn")
+
 
 clock_label = Label(frame2, text=clock, fg="white", bg="black", font=("Ariel", 40, "bold"))
 clock_label.grid(row=0, column=0, sticky="wesn")
@@ -168,44 +173,43 @@ quote_author_label.grid(row=4, column=0, padx=50, sticky="wesn")
 
 
 # -------------------------------------------------- Calendario ---------------------------------------------------
-for i in range(0,4):
-    number_weekday = str(calendar_m.date_number[i]) + " " +  str(calendar_m.weekday[i])
-    hour_name = str(calendar_m.hour[i]) + "     " + str(calendar_m.name[i])
-    i += 1
-    s = str(f"{number_weekday}\n{hour_name}")
+calendar_title_label = Label(frame4, text="Calendario:", fg="white", bg="black", font=("Ariel", 15, "bold"))
+calendar_title_label.grid(row=0, column=0, pady=(0, 5), sticky="w")
 
-    number = Label(frame1, text=s, fg="white", bg="black", font=("Ariel", 15))
-    number.grid(row=i+1, column=0, sticky="nw")
-    row_number += i
-    # hour = Label(text=hour_name, fg="white", bg="black", anchor="sw", font=("Ariel", 15))
-    # hour.grid(row=i+1, column=0)
-    # weekday = Label(text=calendar_m.weekday[i], fg="white", bg="black", anchor="nw", font=("Ariel", 15))
-    # weekday.grid(row=2, column=1)
-    # hour = Label(text=calendar_m.hour[i], fg="white", bg="black", anchor="nw", font=("Ariel", 15))
-    # hour.grid(row=3, column=0)
-    # title = Label(text=calendar_m.name[i], fg="white", bg="black", anchor="nw", font=("Ariel", 15))
-    # title.grid(row=4, column=1)
+for i in range(0,4):
+    frame_c = Frame(frame4, background="black")
+    frame_c.grid(row=1 + i, column=0, sticky="w", pady=(0,10))
+
+    frame_c1 = Frame(frame4, background="black")
+    frame_c1.grid(row=1 + i, column=1, sticky="w", pady=(0,10))
+
+    number_c = Label(frame_c, text=str(calendar_m.date_number[i]), fg="white", bg="black", font=("Ariel", 15))
+    number_c.grid(row=0, column=0, sticky="nw")
+    day_c = Label(frame_c, text=str(calendar_m.weekday[i]), fg="white", bg="black", font=("Ariel", 15))
+    day_c.grid(row=0, column=1, sticky="nw")
+    hour_c = Label(frame_c, text=str(calendar_m.hour[i]), fg="white", bg="black", font=("Ariel", 15), anchor="w")
+    hour_c.grid(row=1, column=1, sticky="wesn", columnspan=2)
+    name_c = Label(frame_c1, text=str(calendar_m.name[i]), fg="white", bg="black", font=("Ariel", 15), anchor="w")
+    name_c.grid(row=1, column=0, sticky="wesn", rowspan=2)
 
 
 # -------------------------------------------------- To Do List ---------------------------------------------------
 print(routine_list)
-routine_title_label = Label(frame1, text="Routine:", fg="white", bg="black", font=("Ariel", 15, "bold"))
-routine_title_label.grid(row=row_number+1, column=0, pady=(30, 5), sticky="w")
+routine_title_label = Label(frame5, text="Routine:", fg="white", bg="black", font=("Ariel", 15, "bold"))
+routine_title_label.grid(row=0, column=0, pady=(30, 5), sticky="w")
 
 for i in range (len(routine_list)):
-    routine_label = Label(frame1, text=f"☐   {routine_list[i]}", fg="white", bg="black", font=("Ariel", 15))
+    routine_label = Label(frame5, text=f"☐   {routine_list[i]}", fg="white", bg="black", font=("Ariel", 15))
     i += 1
-    routine_label.grid(row=row_number + 1 + i, column=0, sticky="w")
-    row_number += i
+    routine_label.grid(row=1+i, column=0, sticky="w")
 
-ricorda_title_label = Label(frame1, text="Ricorda di:", fg="white", bg="black", font=("Ariel", 15, "bold"))
-ricorda_title_label.grid(row=row_number+2, column=0, pady=(30,5), sticky="w")
+ricorda_title_label = Label(frame6, text="Ricorda di:", fg="white", bg="black", font=("Ariel", 15, "bold"))
+ricorda_title_label.grid(row=0, column=0, pady=(30,5), sticky="w")
 
 for i in range (len(ricorda_di_list)):
-    ricorda_di_label = Label(frame1, text=f"☐   {ricorda_di_list[i]}", fg="white", bg="black", font=("Ariel", 15))
+    ricorda_di_label = Label(frame6, text=f"☐   {ricorda_di_list[i]}", fg="white", bg="black", font=("Ariel", 15))
     i += 1
-    ricorda_di_label.grid(row=row_number+2+i, column=0, sticky="w")
-    row_number += i
+    ricorda_di_label.grid(row=1+i, column=0, sticky="w")
 
 
 clock_func()
@@ -215,6 +219,7 @@ quote_text_label.after(4025, change_quote)
 # quote_text_label.after(10000, move_quote)
 
 # gg.main(CLIENT_FILE, SCOPES)
+
 
 # -------------------------------------------------- Meteo ---------------------------------------------------
 raw_data = weather_icon_f()
