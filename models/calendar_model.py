@@ -1,13 +1,14 @@
 import datetime as dt
 import  locale
-from calendar import calendar
+from calendar_2 import calendar
+
 import json
 
 locale.setlocale(locale.LC_ALL, 'it_IT')
 
 class Calendar:
-    def __init__(self, cal):
-        self.calendar = cal
+    def __init__(self, calendar_path):
+        self.calendar = calendar_path
         self.name = self.get_name()
         self.date = self.get_date()
         self.date_number = self.get_date_number()
@@ -15,36 +16,20 @@ class Calendar:
         self.month = self.get_date_month()
         self.hour = self.get_hour()
 
-    def get_dateTime_and_name(self):
-        calendar_list = []
-        for event in calendar:
-            dateStart = event["start"]
-            summary = event["summary"]
-            for key,value in dateStart.items():
-                if key == "dateTime":
-                    cal_event = {summary : value}
-                    calendar_list.append(cal_event)
-        # print(calendar_list)
-        return calendar_list
-
 
     def get_name(self):
-        event_name = []
-        calendar_list =  self.get_dateTime_and_name()
-        for e in calendar_list:
-            for key, value in e.items():
-                event_name.append(key)
+        with open(self.calendar, "r") as data_file:
+            event_names = json.load(data_file)
+        event_name = [ev[1] for ev in event_names]
         # print(event_name)
         return event_name
 
 
     def get_date(self):
-        event_date = []
         date = []
-        calendar_list = self.get_dateTime_and_name()
-        for e in calendar_list:
-            for key,value in e.items():
-                event_date.append(value)
+        with open(self.calendar, "r") as data_file:
+            event_names = json.load(data_file)
+        event_date = [ev[0] for ev in event_names]
         # print(event_date)
 
         for d in event_date:
@@ -81,22 +66,23 @@ class Calendar:
 
 
     def get_hour(self):
-        hour_list = []
         hours = []
-        calendar_list = self.get_dateTime_and_name()
-        for h in calendar_list:
-            for key, value in h.items():
-                hour_list.append(value)
+        with open(self.calendar, "r") as data_file:
+            event_names = json.load(data_file)
+        hour_list = [ev[0] for ev in event_names]
         # print(hour_list)
 
         for h in hour_list:
-            time = str(h[11:19]).split(":")
-            hours.append(dt.time(hour=int(time[0]), minute=int(time[1]), second=int(time[2])).strftime("%H:%M"))
+            try:
+                time = str(h[11:19]).split(":")
+                hours.append(dt.time(hour=int(time[0]), minute=int(time[1]), second=int(time[2])).strftime("%H:%M"))
+            except ValueError:
+                hours.append("Tutto il giorno")
         # print(hours)
         return hours
 
 
-# c = Calendar(calendar)
+# c = Calendar("../static/calendar_events.json")
 # c.get_hour()
 # for i in range(0,5):
 #     i += 1
