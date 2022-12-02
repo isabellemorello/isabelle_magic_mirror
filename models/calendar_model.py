@@ -1,6 +1,5 @@
 import datetime as dt
 import  locale
-from calendar_2 import calendar
 
 import json
 

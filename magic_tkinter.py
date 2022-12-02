@@ -3,14 +3,13 @@ import datetime as dt
 import locale
 from random import randint
 import google_calendar.calendar_google as gc
-# import microsoft_to_do_list.to_do_list as to_do
+import microsoft_to_do_list.to_do_list as to_do
+import microsoft_to_do_list.ms_graph_token as graph_token
 
 import quotes
 from models.calendar_model import Calendar
 
 from models.to_do_list_model import ToDoList
-from microsoft_to_do_list.ricorda_di_task import ricorda_di_task
-from microsoft_to_do_list.routine_task import routine_task
 
 
 from models.weather_model import Weather
@@ -21,6 +20,7 @@ locale.setlocale(locale.LC_ALL, 'it_IT')
 
 try:
     calendar_ev = gc.main("static/calendar_events.json", "google_calendar/credentials.json")
+    microsoft_task = to_do.app_to_do(generate_access_token=graph_token.generate_access_token("microsoft_to_do_list/api_token_access.json"), activities_path="static/activities.json", routine_path="static/routine_task.json", ricorda_path="static/ricorda_di_task.json")
 except Exception as e:
     print(e)
 else:
@@ -30,8 +30,8 @@ else:
     date = now.strftime("%A, %d %B")
     # size = 14
     calendar_m = Calendar("static/calendar_events.json")
-    ricorda_di_list = ToDoList(ricorda_di_task).title_list
-    routine_list = ToDoList(routine_task).title_list
+    routine_list = ToDoList("static/routine_task.json").title_list
+    ricorda_di_list = ToDoList("static/ricorda_di_task.json").title_list
     weather_data = "open_weather_map/weather_one_call.json"
 
     weather = Weather(weather_data)

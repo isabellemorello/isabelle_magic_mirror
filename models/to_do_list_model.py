@@ -1,7 +1,4 @@
-# import json
-from microsoft_to_do_list.ricorda_di_task import ricorda_di_task
-from microsoft_to_do_list.routine_task import routine_task
-
+import json
 
 class ToDoList:
     def __init__(self, to_do_file):
@@ -9,18 +6,14 @@ class ToDoList:
         self.title_list = self.get_title()
 
     def get_title(self):
-        val = []
-        title_list = []
-        for key,value in self.to_do_file.items():
-            if key == "value":
-                val.append(value)
-        value_list = val[0]
-        for el in value_list:
-            title_list.append(el["title"])
+        with open(self.to_do_file, "r") as _f:
+            tasks = json.load(_f)
+        val = [value for key,value in tasks.items() if key == "value"]
+        titles = val[0]
+        title_list = [title["title"] for title in titles if title["status"] != "completed"]
         # print(title_list)
         return title_list
 
 
-td = ToDoList(routine_task)
-# td = ToDoList("../microsoft_to_do_list/ricorda_di_task.py")
-td.get_title()
+# td = ToDoList("../static/ricorda_di_task.json")
+# td.get_title()
